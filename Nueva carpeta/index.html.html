@@ -1,0 +1,115 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumpleaños de Cayita</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+
+        body {
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            background: url('https://i.pinimg.com/736x/5f/6e/8e/5f6e8eb55c1a8f9007cfe09516411ba6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin-top: 50px;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.4);
+        }
+        h1 {
+            font-size: 36px;
+        }
+        #countdown {
+            font-size: 2.5em;
+            font-weight: bold;
+            font-style: italic;
+            color: #ffcc00;
+            padding: 15px;
+        }
+        .btn {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        .btn:hover {
+            background: #ffdd55;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 Cumpleaños de Cayita 🎉</h1>
+        <div id="countdown">Cargando...</div>
+        <button class="btn" onclick="resetCountdown()">Reiniciar</button>
+    </div>
+
+    <script>
+        // Fecha del cumpleaños de Cayita: 2 de marzo de 2025
+        const targetDate = new Date("March 2, 2025 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+
+            if (timeLeft <= 0) {
+                document.getElementById("countdown").innerHTML = "🎉 ¡Feliz cumpleaños Cayita! 🎂";
+                sendNotification();
+                clearInterval(interval);
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = 
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        function sendNotification() {
+            if (Notification.permission === "granted") {
+                new Notification("🎉 ¡Ya es el cumpleaños de Cayita! 🎂", {
+                    body: "¡Corre a felicitarla!",
+                    icon: "https://cdn-icons-png.flaticon.com/512/869/869636.png"
+                });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification("🎉 ¡Ya es el cumpleaños de Cayita! 🎂", {
+                            body: "¡Corre a felicitarla!",
+                            icon: "https://cdn-icons-png.flaticon.com/512/869/869636.png"
+                        });
+                    }
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission();
+            }
+        });
+
+        function resetCountdown() {
+            location.reload();
+        }
+
+        const interval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
